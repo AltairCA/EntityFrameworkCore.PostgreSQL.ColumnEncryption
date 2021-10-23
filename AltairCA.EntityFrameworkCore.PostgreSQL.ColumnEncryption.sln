@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption", "AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption\AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.csproj", "{C091DAA4-9E5F-4054-8990-0D62616B8756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptionTest", "EncryptionTest\EncryptionTest.csproj", "{9C03089A-7CEE-4F0C-9490-9A80DBDA0580}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{77C03DC1-693B-4011-9B76-F9E539323988}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C091DAA4-9E5F-4054-8990-0D62616B8756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C091DAA4-9E5F-4054-8990-0D62616B8756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C091DAA4-9E5F-4054-8990-0D62616B8756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C091DAA4-9E5F-4054-8990-0D62616B8756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C03089A-7CEE-4F0C-9490-9A80DBDA0580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C03089A-7CEE-4F0C-9490-9A80DBDA0580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C03089A-7CEE-4F0C-9490-9A80DBDA0580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C03089A-7CEE-4F0C-9490-9A80DBDA0580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C03DC1-693B-4011-9B76-F9E539323988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C03DC1-693B-4011-9B76-F9E539323988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C03DC1-693B-4011-9B76-F9E539323988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C03DC1-693B-4011-9B76-F9E539323988}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
