@@ -8,13 +8,13 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Attribute
     {
         public static string NpgsqlEncrypt(this string value, string password,string iv,int keyLength)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrEmpty(value))
                 return null;
             return AesUtil.AES_encrypt(value, password,iv,keyLength);
         }
         public static string NpgsqlDecrypt(this string value, string password,string iv,int keyLength)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrEmpty(value))
                 return null;
             return AesUtil.AES_decrypt(value, password,iv,keyLength);
         }

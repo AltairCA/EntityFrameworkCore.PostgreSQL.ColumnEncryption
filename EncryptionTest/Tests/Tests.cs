@@ -223,5 +223,72 @@ namespace EncryptionTest.Tests
                 Assert.Equal(obj.encrypted,testings.encrypted);
             }
         }
+
+        [Fact]
+        public async Task TEST_ENCRYPTION_NULL_VALUE()
+        {
+            //Prepare
+            await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.MigrateAsync();
+            
+            
+            var testOrders = new Faker<Testings>()
+                .RuleFor(x => x.Id, f => Guid.NewGuid().ToString())
+                .RuleFor(x => x.encrypted, f => null)
+                .RuleFor(x => x.normal, f => f.Person.FullName);
+            
+            //Execute
+            var testObjs = testOrders.Generate(10);
+            await _dbContext.Testings.AddRangeAsync(testObjs);
+            await _dbContext.SaveChangesAsync();
+            //Validation
+            var fromDbObj = await _dbContext.Testings.AsNoTracking().ToListAsync();
+            Assert.Equal(10,fromDbObj.Count);
+            Assert.True(fromDbObj.All(x=> string.IsNullOrEmpty(x.encrypted)));
+        }
+        [Fact]
+        public async Task TEST_ENCRYPTION_NULL_VALUE_DB_FUNCTION()
+        {
+            //Prepare
+            await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.MigrateAsync();
+            
+            
+            var testOrders = new Faker<Testings>()
+                .RuleFor(x => x.Id, f => Guid.NewGuid().ToString())
+                .RuleFor(x => x.encrypted, f => null)
+                .RuleFor(x => x.normal, f => f.Person.FullName);
+            
+            //Execute
+            var testObjs = testOrders.Generate(10);
+            await _dbContext.Testings.AddRangeAsync(testObjs);
+            await _dbContext.SaveChangesAsync();
+            //Validation
+            var fromDbObj = await _dbContext.Testings.AsNoTracking().Where(x=> string.IsNullOrEmpty(x.encrypted.NpgDecrypt())).ToListAsync();
+            Assert.Equal(10,fromDbObj.Count);
+            Assert.True(fromDbObj.All(x=> string.IsNullOrEmpty(x.encrypted)));
+        }
+        [Fact]
+        public async Task TEST_ENCRYPTION_EMPTY_SPACE_DB_FUNCTION()
+        {
+            //Prepare
+            await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.MigrateAsync();
+            
+            
+            var testOrders = new Faker<Testings>()
+                .RuleFor(x => x.Id, f => Guid.NewGuid().ToString())
+                .RuleFor(x => x.encrypted, f => " ")
+                .RuleFor(x => x.normal, f => f.Person.FullName);
+            
+            //Execute
+            var testObjs = testOrders.Generate(10);
+            await _dbContext.Testings.AddRangeAsync(testObjs);
+            await _dbContext.SaveChangesAsync();
+            //Validation
+            var fromDbObj = await _dbContext.Testings.AsNoTracking().Where(x=> string.IsNullOrWhiteSpace(x.encrypted.NpgDecrypt())).ToListAsync();
+            Assert.Equal(10,fromDbObj.Count);
+            Assert.True(fromDbObj.All(x=> string.IsNullOrEmpty(x.encrypted)));
+        }
     }
 }
