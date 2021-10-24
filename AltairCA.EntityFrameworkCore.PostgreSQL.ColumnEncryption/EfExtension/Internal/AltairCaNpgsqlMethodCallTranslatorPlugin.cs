@@ -9,8 +9,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
 {
     internal class AltairCaNpgsqlMethodCallTranslatorPlugin:NpgsqlMethodCallTranslatorProvider
     {
-        public AltairCaNpgsqlMethodCallTranslatorPlugin(RelationalMethodCallTranslatorProviderDependencies dependencies, IRelationalTypeMappingSource typeMappingSource, INpgsqlOptions npgsqlOptions) 
-            : base(dependencies, typeMappingSource, npgsqlOptions)
+        public AltairCaNpgsqlMethodCallTranslatorPlugin(RelationalMethodCallTranslatorProviderDependencies dependencies, IRelationalTypeMappingSource typeMappingSource) : base(dependencies, typeMappingSource)
         {
             ISqlExpressionFactory expressionFactory = dependencies.SqlExpressionFactory;
             this.AddTranslators(new List<IMethodCallTranslator>

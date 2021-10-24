@@ -45,7 +45,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
             _expressionFactory = expressionFactory;
         }
 
-        public SqlExpression Translate(SqlExpression instance, MethodInfo method, IReadOnlyList<SqlExpression> arguments,IDiagnosticsLogger<DbLoggerCategory.Query> logger)
+        public SqlExpression Translate(SqlExpression instance, MethodInfo method, IReadOnlyList<SqlExpression> arguments)
         {
             
             var password = _expressionFactory.Constant(Password);

@@ -13,7 +13,7 @@ Meaning this will support search query on encrypted columns. Well, this is good 
 ```
 take a look at `SSL Mode=Require;Trust Server Certificate=true;`
 
-`AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption` targets `netstandard2.1`. The package has following dependencies
+`AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption` targets `netstandard2.0`. The package has following dependencies
 
 ```xml
 <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />

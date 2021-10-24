@@ -13,9 +13,9 @@ namespace EncryptionTest.Migrations
                 name: "Testings",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    encrypted = table.Column<string>(type: "text", nullable: true),
-                    normal = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    encrypted = table.Column<string>(nullable: true),
+                    normal = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
