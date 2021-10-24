@@ -16,10 +16,10 @@ take a look at `SSL Mode=Require;Trust Server Certificate=true;`
 `AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption` targets `netstandard2.0`. The package has following dependencies
 
 ```xml
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
 ```
 
-When you choose the version choose with the `.Net Core` Version for example if `.Net Core` version is 5.0 then choose `AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption` version 5.0.x
+When you choose the version choose with the `.Net Core` Version for example if `.Net Core` version is 3.1 then choose `AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption` version 3.1.x
 
 ## setup
 
