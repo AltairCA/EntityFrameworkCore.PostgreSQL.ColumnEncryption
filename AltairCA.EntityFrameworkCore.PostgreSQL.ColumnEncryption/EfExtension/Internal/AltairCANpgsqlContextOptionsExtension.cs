@@ -10,9 +10,11 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
     internal class AltairCaNpgsqlContextOptionsExtension:IDbContextOptionsExtension
     {
         
-        public AltairCaNpgsqlContextOptionsExtension(string password)
+        public AltairCaNpgsqlContextOptionsExtension(string password,EncKeyLength encKeyLength)
         {
-            AltairCaFunctionImplementation.Password = AesUtil.PasswordFixer(password);
+            int keyLength = AesUtil.GetKeyLength(encKeyLength);
+            AltairCaFunctionImplementation.Password = AesUtil.PasswordFixer(password,keyLength);
+            AltairCaFunctionImplementation.Iv = AesUtil.IvFixer(password,keyLength);
         }
         private DbContextOptionsExtensionInfo _info;
         public void ApplyServices(IServiceCollection services)

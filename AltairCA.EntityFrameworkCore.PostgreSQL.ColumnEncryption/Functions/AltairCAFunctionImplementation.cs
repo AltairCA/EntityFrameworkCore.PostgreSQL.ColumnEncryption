@@ -11,6 +11,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
     internal class AltairCaFunctionImplementation:IMethodCallTranslator
     {
         public static string Password { get; set; }
+        public static string Iv { get; set; }
         private readonly ISqlExpressionFactory _expressionFactory;
 
         private static readonly MethodInfo _encryptMethod
@@ -46,10 +47,10 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
 
         public SqlExpression Translate(SqlExpression instance, MethodInfo method, IReadOnlyList<SqlExpression> arguments,IDiagnosticsLogger<DbLoggerCategory.Query> logger)
         {
-           
             
             var password = _expressionFactory.Constant(Password);
             var algoConf = _expressionFactory.Constant("aes-cbc/pad:pkcs");
+            var iv = _expressionFactory.Constant(Iv);
             
             if (method == _nonTranslatableEncryptMethod || method == __nonTranslatableDecryptMethod)
             {
@@ -59,7 +60,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
             {
                 var value = arguments[0];
                 
-                var aesToHexExpression = AESEncryptionBuild(password, value,algoConf);
+                var aesToHexExpression = AESEncryptionBuild(password, iv,value,algoConf);
 
                 return aesToHexExpression;
             }
@@ -67,7 +68,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
             {
                 var value = arguments[1];
                 
-                var aesToHexExpression = AESEncryptionBuild(password, value,algoConf);
+                var aesToHexExpression = AESEncryptionBuild(password, iv,value,algoConf);
 
                 return aesToHexExpression;
             }
@@ -76,20 +77,20 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
             {
                 var value = arguments[1];
                 
-                var aesDecryptExpression = AesDecryptExpression(password, value,algoConf);
+                var aesDecryptExpression = AesDecryptExpression(password,iv, value,algoConf);
                 return _expressionFactory.Convert(aesDecryptExpression, typeof(string));
             }
             if (method == _decryptStringMethod)
             {
                 var value = arguments[0];
 
-                var aesDecryptExpression = AesDecryptExpression(password, value,algoConf);
+                var aesDecryptExpression = AesDecryptExpression(password, iv,value,algoConf);
                 return _expressionFactory.Convert(aesDecryptExpression, typeof(string));
             }
             return null;
         }
 
-        private SqlFunctionExpression AesDecryptExpression( SqlExpression password, SqlExpression value, SqlExpression algoConf)
+        private SqlFunctionExpression AesDecryptExpression( SqlExpression password,SqlExpression iv, SqlExpression value, SqlExpression algoConf)
         {
             var hexExpression = _expressionFactory.Constant("base64");
             var decodeExpression = _expressionFactory.Function("decode", new List<SqlExpression>()
@@ -97,10 +98,11 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
                 value,
                 hexExpression
             }, typeof(byte[]));
-            var decryptExpression = _expressionFactory.Function( "decrypt", new List<SqlExpression>()
+            var decryptExpression = _expressionFactory.Function( "decrypt_iv", new List<SqlExpression>()
             {
                 decodeExpression,
                 password,
+                iv,
                 algoConf
             },typeof(byte[]));
             var decryptConvert = _expressionFactory.Convert(decryptExpression, typeof(byte[]));
@@ -112,16 +114,17 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
             return convertFromExpression;
         }
 
-        protected virtual SqlFunctionExpression AESEncryptionBuild(SqlExpression password,
+        protected virtual SqlFunctionExpression AESEncryptionBuild(SqlExpression password,SqlExpression iv,
             SqlExpression value, SqlExpression algoConf)
         {
             var hexExpression = _expressionFactory.Constant("base64");
             var convertToBytea = _expressionFactory.Convert(value, typeof(byte[]));
-            var aesEncryptionExpression = _expressionFactory.Function( "encrypt",
+            var aesEncryptionExpression = _expressionFactory.Function( "encrypt_iv",
                 new List<SqlExpression>()
                 {
                     convertToBytea,
                     password,
+                    iv,
                     algoConf
                 }, typeof(byte[]));
             var aesToHexExpression = _expressionFactory.Function("encode", new List<SqlExpression>()

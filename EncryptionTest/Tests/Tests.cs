@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions;
 using Bogus;
@@ -128,7 +129,7 @@ namespace EncryptionTest.Tests
             await _dbContext.Testings.AddRangeAsync(testObjs);
             await _dbContext.SaveChangesAsync();
 
-            var grouped = await _dbContext.Testings.GroupBy(x => x.encrypted.NpgDecrypt()).Select(x => x.Key)
+            var grouped = await _dbContext.Testings.AsNoTracking().GroupBy(x => x.encrypted.NpgDecrypt()).Select(x => x.Key)
                 .ToListAsync();
             //Test
             foreach (string s in grouped)

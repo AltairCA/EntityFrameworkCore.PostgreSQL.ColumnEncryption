@@ -9,13 +9,17 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension
     public static class AttributeExtension
     {
 		private static readonly ValueConverter<string, string> _converter
-	 = new ValueConverter<string, string>(color => color.NpgsqlEncrypt(Password),
-										 name => name.NpgsqlDecrypt(Password));
+	 = new ValueConverter<string, string>(color => color.NpgsqlEncrypt(Password,Iv,KeyLength),
+										 name => name.NpgsqlDecrypt(Password,Iv,KeyLength));
 		private static string Password { get; set; }
-		public static ModelBuilder UseEncryptAttribute(this ModelBuilder builder,string password)
+		private static string Iv { get; set; }
+		private static int KeyLength { get; set; }
+		public static ModelBuilder UseEncryptAttribute(this ModelBuilder builder,string password,EncKeyLength encKeyLength)
         {
-
-            AttributeExtension.Password = AesUtil.PasswordFixer(password);;
+	        KeyLength = AesUtil.GetKeyLength(encKeyLength);
+            AttributeExtension.Password = AesUtil.PasswordFixer(password,KeyLength);
+            Iv = AesUtil.IvFixer(password,KeyLength);
+            
             foreach (var entityType in builder.Model.GetEntityTypes())
 			{
 				foreach (var property in entityType.GetProperties())

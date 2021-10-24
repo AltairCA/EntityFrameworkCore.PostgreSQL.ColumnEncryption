@@ -1,4 +1,5 @@
 using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension;
+using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace EncryptionTest.Data
@@ -13,13 +14,13 @@ namespace EncryptionTest.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseEncryptionFunctions("NBJ42RKQ2vQoYFZOj1C83921vHExVhVp1PlOAK6gjbMZI");
+            optionsBuilder.UseEncryptionFunctions("NBJ42RKQ2vQoYFZOj1C83921vHExVhVp1PlOAK6gjbMZI",EncKeyLength.L128);
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.HasPostgresExtension("pgcrypto");
-            builder.UseEncryptAttribute("NBJ42RKQ2vQoYFZOj1C83921vHExVhVp1PlOAK6gjbMZI");
+            builder.UseEncryptAttribute("NBJ42RKQ2vQoYFZOj1C83921vHExVhVp1PlOAK6gjbMZI",EncKeyLength.L128);
         }
     }
 }
