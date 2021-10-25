@@ -288,7 +288,7 @@ namespace EncryptionTest.Tests
             //Validation
             var fromDbObj = await _dbContext.Testings.AsNoTracking().Where(x=> string.IsNullOrWhiteSpace(x.encrypted.NpgDecrypt())).ToListAsync();
             Assert.Equal(10,fromDbObj.Count);
-            Assert.True(fromDbObj.All(x=> string.IsNullOrEmpty(x.encrypted)));
+            Assert.True(fromDbObj.All(x=> x.encrypted == " "));
         }
     }
 }
