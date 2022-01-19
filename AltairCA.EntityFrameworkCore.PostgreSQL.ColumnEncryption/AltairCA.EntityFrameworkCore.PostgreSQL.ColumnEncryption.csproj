@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>EntityFrameworkCore PostgresSQL ColumnEncryption</Title>
-        <PackageVersion>6.0.1</PackageVersion>
+        <PackageVersion>6.0.2</PackageVersion>
         <Copyright>Michika Iranga Perera</Copyright>
         <PackageProjectUrl>https://github.com/AltairCA/EntityFrameworkCore.PostgreSQL.ColumnEncryption</PackageProjectUrl>
         <PackageLicenseUrl>https://raw.githubusercontent.com/AltairCA/EntityFrameworkCore.PostgreSQL.ColumnEncryption/master/AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption/LICENSE</PackageLicenseUrl>
@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.2" />
     </ItemGroup>
 
 </Project>
