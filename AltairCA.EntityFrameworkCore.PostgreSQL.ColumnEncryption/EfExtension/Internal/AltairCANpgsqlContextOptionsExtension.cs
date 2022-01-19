@@ -19,7 +19,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
         private DbContextOptionsExtensionInfo _info;
         public void ApplyServices(IServiceCollection services)
         {
-            services.AddSingleton<IMethodCallTranslatorProvider, AltairCaNpgsqlMethodCallTranslatorPlugin>();
+            new EntityFrameworkRelationalServicesBuilder(services).TryAdd<IMethodCallTranslatorPlugin,AltairCaNpgsqlMethodCallTranslatorPlugin>();
         }
 
         public void Validate(IDbContextOptions options)
@@ -42,12 +42,17 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
 
             public override string LogFragment => "";
 
+            public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other)
+            {
+                return true;
+            }
+
             public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
             {
 
             }
 
-            public override long GetServiceProviderHashCode()
+            public override int GetServiceProviderHashCode()
             {
                 return 0;
             }

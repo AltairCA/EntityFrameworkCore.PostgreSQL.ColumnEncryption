@@ -1,22 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.ExpressionTranslators.Internal;
 
 namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.Internal
 {
-    internal class AltairCaNpgsqlMethodCallTranslatorPlugin:NpgsqlMethodCallTranslatorProvider
+    internal class AltairCaNpgsqlMethodCallTranslatorPlugin:IMethodCallTranslatorPlugin
     {
-        public AltairCaNpgsqlMethodCallTranslatorPlugin(RelationalMethodCallTranslatorProviderDependencies dependencies, IRelationalTypeMappingSource typeMappingSource, INpgsqlOptions npgsqlOptions) 
-            : base(dependencies, typeMappingSource, npgsqlOptions)
+        public AltairCaNpgsqlMethodCallTranslatorPlugin(IRelationalTypeMappingSource typeMappingSource,
+            ISqlExpressionFactory sqlExpressionFactory) 
+            
         {
-            ISqlExpressionFactory expressionFactory = dependencies.SqlExpressionFactory;
-            this.AddTranslators(new List<IMethodCallTranslator>
+            if (!(sqlExpressionFactory is NpgsqlSqlExpressionFactory npgsqlSqlExpressionFactory))
             {
-                new AltairCaFunctionImplementation(expressionFactory)
-            });
+                throw new ArgumentException($"Must be an {nameof(NpgsqlSqlExpressionFactory)}", nameof(sqlExpressionFactory));
+            }
+            Translators = new IMethodCallTranslator[] { new AltairCaFunctionImplementation(sqlExpressionFactory), };
         }
+
+        public IEnumerable<IMethodCallTranslator> Translators { get; }
     }
 }
