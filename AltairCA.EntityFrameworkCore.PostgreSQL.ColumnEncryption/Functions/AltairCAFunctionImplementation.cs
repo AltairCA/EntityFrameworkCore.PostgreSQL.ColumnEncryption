@@ -97,6 +97,10 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
             {
                 value,
                 hexExpression
+            },true,new List<bool>
+            {
+                true,
+                false
             }, typeof(byte[]));
             var decryptExpression = _expressionFactory.Function( "decrypt_iv", new List<SqlExpression>()
             {
@@ -104,12 +108,22 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
                 password,
                 iv,
                 algoConf
+            },true,new List<bool>
+            {
+                true,
+                false,
+                false,
+                false
             },typeof(byte[]));
             var decryptConvert = _expressionFactory.Convert(decryptExpression, typeof(byte[]));
             var convertFromExpression = _expressionFactory.Function("convert_from", new List<SqlExpression>()
             {
                 decryptConvert,
                 _expressionFactory.Constant("UTF-8")
+            },true,new List<bool>
+            {
+                true,
+                false
             },typeof(string));
             return convertFromExpression;
         }
@@ -126,11 +140,21 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
                     password,
                     iv,
                     algoConf
+                },true,new List<bool>
+                {
+                    true,
+                    false,
+                    false,
+                    false
                 }, typeof(byte[]));
             var aesToHexExpression = _expressionFactory.Function("encode", new List<SqlExpression>()
             {
                 aesEncryptionExpression,
                 hexExpression
+            },true,new List<bool>
+            {
+                true,
+                false
             }, typeof(string));
             return aesToHexExpression;
         }

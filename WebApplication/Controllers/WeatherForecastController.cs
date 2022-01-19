@@ -32,12 +32,12 @@ namespace WebApplication.Controllers
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            var testOrders = new Faker<Testings>()
-                .RuleFor(x => x.Id, f => Guid.NewGuid().ToString())
-                .RuleFor(x => x.encrypted, f => f.Person.FullName)
-                .RuleFor(x => x.normal, f => f.Person.FullName);
+            // var testOrders = new Faker<Testings>()
+            //     .RuleFor(x => x.Id, f => Guid.NewGuid().ToString())
+            //     .RuleFor(x => x.encrypted, f => f.Person.FullName)
+            //     .RuleFor(x => x.normal, f => f.Person.FullName);
             
-            var obj = await _dbContext.Testings.AsNoTracking().FirstOrDefaultAsync(x => x.encrypted == x.normal.NpgEncrypt());
+            var obj = await _dbContext.Testings.AsNoTracking().Where(x => x.encrypted.NpgDecrypt() == x.normal).ToListAsync();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
                 {

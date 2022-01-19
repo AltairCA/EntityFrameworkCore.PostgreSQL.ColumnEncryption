@@ -27,13 +27,8 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
             
         }
 
-        public DbContextOptionsExtensionInfo Info
-        {
-            get
-            {
-                return this._info ?? (MyDbContextOptionsExtensionInfo)new MyDbContextOptionsExtensionInfo((IDbContextOptionsExtension)this);
-            }
-        }
+        public DbContextOptionsExtensionInfo Info => this._info ?? (MyDbContextOptionsExtensionInfo)new MyDbContextOptionsExtensionInfo((IDbContextOptionsExtension)this);
+
         private sealed class MyDbContextOptionsExtensionInfo : DbContextOptionsExtensionInfo
         {
             public MyDbContextOptionsExtensionInfo(IDbContextOptionsExtension instance) : base(instance) { }
