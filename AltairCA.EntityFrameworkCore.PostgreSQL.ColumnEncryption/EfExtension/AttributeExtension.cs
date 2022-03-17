@@ -22,7 +22,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension
             
             foreach (var entityType in builder.Model.GetEntityTypes())
 			{
-				foreach (var property in entityType.GetProperties())
+				foreach (var property in entityType.GetProperties().Where(p => p.PropertyInfo != null))
 				{
 					var attributes = property.PropertyInfo.GetCustomAttributes(typeof(NpgsqlEncryptAttribute), false);
 					if (attributes.Any())
