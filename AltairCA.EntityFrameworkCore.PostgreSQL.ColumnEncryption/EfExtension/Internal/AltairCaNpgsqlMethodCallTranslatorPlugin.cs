@@ -10,17 +10,17 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Query.ExpressionTranslators.Internal
 
 namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.Internal
 {
-    internal class AltairCaNpgsqlMethodCallTranslatorPlugin:IMethodCallTranslatorPlugin
+    internal class AltairCaNpgsqlMethodCallTranslatorPlugin : IMethodCallTranslatorPlugin
     {
         public AltairCaNpgsqlMethodCallTranslatorPlugin(IRelationalTypeMappingSource typeMappingSource,
-            ISqlExpressionFactory sqlExpressionFactory) 
-            
+            ISqlExpressionFactory sqlExpressionFactory, string password, string iv)
+
         {
             if (!(sqlExpressionFactory is NpgsqlSqlExpressionFactory npgsqlSqlExpressionFactory))
             {
                 throw new ArgumentException($"Must be an {nameof(NpgsqlSqlExpressionFactory)}", nameof(sqlExpressionFactory));
             }
-            Translators = new IMethodCallTranslator[] { new AltairCaFunctionImplementation(sqlExpressionFactory), };
+            Translators = new IMethodCallTranslator[] { new AltairCaFunctionImplementation(sqlExpressionFactory, password, iv), };
         }
 
         public IEnumerable<IMethodCallTranslator> Translators { get; }

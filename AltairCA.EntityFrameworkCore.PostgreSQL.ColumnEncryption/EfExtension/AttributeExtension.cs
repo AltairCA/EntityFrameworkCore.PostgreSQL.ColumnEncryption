@@ -8,30 +8,26 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension
 {
     public static class AttributeExtension
     {
-		private static readonly ValueConverter<string, string> _converter
-	 = new ValueConverter<string, string>(color => color.NpgsqlEncrypt(Password,Iv,KeyLength),
-										 name => name.NpgsqlDecrypt(Password,Iv,KeyLength));
-		private static string Password { get; set; }
-		private static string Iv { get; set; }
-		private static int KeyLength { get; set; }
-		public static ModelBuilder UseEncryptAttribute(this ModelBuilder builder,string password,EncKeyLength encKeyLength)
+
+        public static ModelBuilder UseEncryptAttribute(this ModelBuilder builder, string password, EncKeyLength encKeyLength)
         {
-	        KeyLength = AesUtil.GetKeyLength(encKeyLength);
-            AttributeExtension.Password = AesUtil.PasswordFixer(password,KeyLength);
-            Iv = AesUtil.IvFixer(password,KeyLength);
-            
+            var keyLength = AesUtil.GetKeyLength(encKeyLength);
+            var fixedPassword = AesUtil.PasswordFixer(password, keyLength);
+            var iv = AesUtil.IvFixer(password, keyLength);
+
             foreach (var entityType in builder.Model.GetEntityTypes())
-			{
-				foreach (var property in entityType.GetProperties().Where(p => p.PropertyInfo != null))
-				{
-					var attributes = property.PropertyInfo.GetCustomAttributes(typeof(NpgsqlEncryptAttribute), false);
-					if (attributes.Any())
-					{
-						property.SetValueConverter(_converter);
-					}
-				}
-			}
-			return builder;
+            {
+                foreach (var property in entityType.GetProperties().Where(p => p.PropertyInfo != null))
+                {
+                    var attributes = property.PropertyInfo.GetCustomAttributes(typeof(NpgsqlEncryptAttribute), false);
+                    if (attributes.Any())
+                    {
+                        property.SetValueConverter(new ValueConverter<string, string>(color => color.NpgsqlEncrypt(fixedPassword, iv, keyLength),
+                                         name => name.NpgsqlDecrypt(fixedPassword, iv, keyLength)));
+                    }
+                }
+            }
+            return builder;
         }
     }
 }
