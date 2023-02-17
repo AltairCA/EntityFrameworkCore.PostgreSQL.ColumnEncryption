@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions;
 using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -36,7 +37,8 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
 
         }
 
-        public DbContextOptionsExtensionInfo Info => _info ?? new MyDbContextOptionsExtensionInfo((IDbContextOptionsExtension)this);
+        public DbContextOptionsExtensionInfo Info =>
+            _info ??= new MyDbContextOptionsExtensionInfo((IDbContextOptionsExtension)this);
 
         private sealed class MyDbContextOptionsExtensionInfo : DbContextOptionsExtensionInfo
         {
@@ -58,7 +60,10 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
 
             public override int GetServiceProviderHashCode()
             {
-                return 0;
+                var password = ((AltairCaNpgsqlContextOptionsExtension)Extension)._password +
+                    ((AltairCaNpgsqlContextOptionsExtension)Extension)._iv;
+                var hash = password.GetHashCode();
+                return hash;
             }
         }
     }
