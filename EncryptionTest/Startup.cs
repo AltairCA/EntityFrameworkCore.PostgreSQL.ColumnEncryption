@@ -1,4 +1,6 @@
 using System;
+using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension;
+using AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils;
 using EncryptionTest.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,7 @@ namespace EncryptionTest
                 {
                     options.UseNpgsql(
                         context.Configuration.GetConnectionString("DefaultConnection"));
+                    options.UseEncryptionFunctions("NBJ42RKQ2vQoYFZOj1C83921vHExVhVp1PlOAK6gjbMZI", EncKeyLength.L128);
                     //options.AddRelationalTypeMappingSourcePlugin<EncryptAttributeTypeMappingPlugin>();
                 }
             );

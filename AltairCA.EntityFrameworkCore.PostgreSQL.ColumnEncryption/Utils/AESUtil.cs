@@ -8,15 +8,15 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils
 {
     internal static class AesUtil
     {
-        public static String AES_encrypt(String input, string key,string Iv,int keyLength)
+        public static String AES_encrypt(String input, string key,string iv,int keyLength)
         {
-            RijndaelManaged aes = new RijndaelManaged();
+            Aes aes = Aes.Create();
             aes.KeySize = keyLength;
             aes.BlockSize = 128;
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
-            aes.Key = mkey(key,keyLength);
-            aes.IV = mkey(Iv,128);
+            aes.Key = MKey(key,keyLength);
+            aes.IV = MKey(iv,128);
             
             var encrypt = aes.CreateEncryptor(aes.Key, aes.IV);
             byte[] xBuff = null;
@@ -34,22 +34,22 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils
 
             return Convert.ToBase64String(xBuff,Base64FormattingOptions.None);
         }
-        public static String AES_decrypt(String Input, string key,string Iv,int keyLength)
+        public static String AES_decrypt(String input, string key,string iv,int keyLength)
         {
             try
             {
-                RijndaelManaged aes = new RijndaelManaged();
+                Aes aes = Aes.Create();
                 aes.KeySize = keyLength;
                 aes.BlockSize = 128;
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
-                aes.Key = mkey(key,keyLength);
-                aes.IV = mkey(Iv,128);
+                aes.Key = MKey(key,keyLength);
+                aes.IV = MKey(iv,128);
                 
                 var decrypt = aes.CreateDecryptor();
-                byte[] encryptedStr = Convert.FromBase64String(Input);
+                byte[] encryptedStr = Convert.FromBase64String(input);
 
-                string Plain_Text;
+                string plainText;
 
                 using (var ms = new MemoryStream(encryptedStr))
                 {
@@ -57,22 +57,22 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils
                     {
                         using (StreamReader reader = new StreamReader(cs))
                         {
-                            Plain_Text = reader.ReadToEnd();
+                            plainText = reader.ReadToEnd();
                         }
                     }
                 }
 
-                return Plain_Text;
+                return plainText;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
         }
-        private static byte[] mkey(string skey,int keyLength)
+        private static byte[] MKey(string sKey,int keyLength)
         {
             int length = keyLength / 8;
-            byte[] key = Encoding.UTF8.GetBytes(skey);
+            byte[] key = Encoding.UTF8.GetBytes(sKey);
             byte[] k =  GenerateEmptyArray(length);
             for (int i = 0; i < key.Length; i++)
             {
@@ -84,10 +84,10 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils
 
             return k;
         }
-        public static string PasswordFixer(string skey,int keyLength)
+        public static string PasswordFixer(string sKey,int keyLength)
         {
             int length = keyLength / 8;
-            byte[] key = Encoding.UTF8.GetBytes(skey);
+            byte[] key = Encoding.UTF8.GetBytes(sKey);
             byte[] k = GenerateEmptyArray(length);
             for (int i = 0; i < key.Length; i++)
             {
@@ -98,10 +98,10 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Utils
 
             return Encoding.UTF8.GetString(k);
         }
-        public static string IvFixer(string skey,int keyLength)
+        public static string IvFixer(string sKey,int keyLength)
         {
             int length = keyLength / 8;
-            byte[] key = Encoding.UTF8.GetBytes(skey);
+            byte[] key = Encoding.UTF8.GetBytes(sKey);
             byte[] k = GenerateEmptyArray(16);
             for (int i = length; i < key.Length; i++)
             {
