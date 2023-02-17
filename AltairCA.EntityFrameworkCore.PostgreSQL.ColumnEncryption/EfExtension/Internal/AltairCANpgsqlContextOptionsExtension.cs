@@ -48,7 +48,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.EfExtension.I
 
             public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other)
             {
-                return false;
+                return true;
             }
 
             public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
