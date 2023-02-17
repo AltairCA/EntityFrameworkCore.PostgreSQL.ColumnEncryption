@@ -40,6 +40,7 @@ namespace AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption.Functions
            = typeof(NpgsqlFunctionExtensions).GetMethod(
                nameof(NpgsqlFunctionExtensions.NpgDecrypt),
                new[] { typeof(string), typeof(string) });
+       
         public AltairCaFunctionImplementation(ISqlExpressionFactory expressionFactory, string password, string iv)
         {
             _expressionFactory = expressionFactory;
