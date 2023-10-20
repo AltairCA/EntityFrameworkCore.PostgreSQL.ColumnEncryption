@@ -1,4 +1,4 @@
-### Unreleased
+### 6.0.2.3
 
 - Added `UseEncryption` extension to use with property configuration.
 
