@@ -21,6 +21,7 @@ namespace EncryptionTest.Data
             base.OnModelCreating(builder);
             builder.HasPostgresExtension("pgcrypto");
             builder.UseEncryptAttribute("NBJ42RKQ2vQoYFZOj1C83921vHExVhVp1PlOAK6gjbMZI",EncKeyLength.L128);
+            //builder.ApplyConfiguration(new TestingConfiguration());
         }
     }
 }
