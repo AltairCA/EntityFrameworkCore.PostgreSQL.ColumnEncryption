@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>EntityFrameworkCore PostgresSQL ColumnEncryption</Title>
-        <PackageVersion>6.0.2.3 </PackageVersion>
+        <PackageVersion>8.0.4</PackageVersion>
         <Copyright>Michika Iranga Perera</Copyright>
         <PackageProjectUrl>https://github.com/AltairCA/EntityFrameworkCore.PostgreSQL.ColumnEncryption</PackageProjectUrl>
         <PackageLicenseUrl>https://raw.githubusercontent.com/AltairCA/EntityFrameworkCore.PostgreSQL.ColumnEncryption/master/AltairCA.EntityFrameworkCore.PostgreSQL.ColumnEncryption/LICENSE</PackageLicenseUrl>
@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.2" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
     </ItemGroup>
 
 </Project>
